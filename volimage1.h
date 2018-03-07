@@ -15,8 +15,9 @@ class VolImage{
       int width;      
       int height;
       
-      std::vector<unsigned char **> slices;//data for each slice in order
-      std::vector<char> slice; //contains single image slice data
+      vector<unsigned char **> slices;//data for each slice in order
+      
+      //std::vector<char> slice; //contains single image slice data
       
    public:
       
