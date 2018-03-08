@@ -51,7 +51,7 @@ void VolImage::readImages(string baseName){
          slice[i] = new unsigned char[width];
       }
 
-      
+       
       FILE * pFile;
       pFile = fopen(fileName.c_str(), "r");
       fread(&slice[0][0], height, width, pFile);
@@ -62,15 +62,15 @@ void VolImage::readImages(string baseName){
       
       VolImage::slices.push_back(slice); //push back stuff now...push_back(new slice??)
       
-      
+      /*
       //Deallocate the array
       for (int i = 0; i < height; i++){
          delete[] slice[i];
       }
       delete[] slice;
-      
+      */
    }
    
-   //cout << VolImage::slices.size();
+   //cout << "Random slice piece " << VolImage::slices[0][150][100];
    
 }
