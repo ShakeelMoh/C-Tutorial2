@@ -23,6 +23,7 @@ class VolImage{
       
       VolImage(); //default constructor defined in .cpp
       //VolImage(); //destructor defined in .cpp
+
       
       //populate object with images from stack
       void readImages(string baseName);

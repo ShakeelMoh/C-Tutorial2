@@ -38,6 +38,7 @@ int main (int argc, char *argv[]) { //argc = num args. argv = arr of args
         
    VolImage v;
 
+   
    v.readImages(baseName);
 
    
