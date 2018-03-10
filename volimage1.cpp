@@ -5,11 +5,13 @@
 #include <fstream> //For reading/writing textfile
 #include <iterator>
 #include <vector>
+#include <cmath>
+
+//#define ARRAY_SIZE(array) (sizeof((array))/sizeof((array[0])))
 
 using namespace std;
 
 VolImage::VolImage(){
-
    width = 0;
    height = 0;
 }
@@ -31,6 +33,8 @@ void VolImage::readImages(string baseName){
 
    inFile >> width >> height >> numImages;
 
+   VolImage::height = height;
+   VolImage::width = width;
    inFile.close();
    
    cout << baseName << "\n\n";
@@ -73,4 +77,68 @@ void VolImage::readImages(string baseName){
    
    //cout << "Random slice piece " << VolImage::slices[0][150][100];
    
+}
+
+void VolImage::extract(int sliceID, string prefix){
+   
+   //cout << VolImage::height << " " << VolImage::width;
+
+   //cout << sliceID << " " << prefix << "\n";
+   //cout << "Random slice piece " << VolImage::slices[1][150][100];
+   ofstream dataFile (prefix + ".txt");
+   dataFile << "1 1 1" << endl;
+   dataFile.close();
+   
+   ofstream  rawFile(prefix + ".raw");
+   rawFile.close();
+   
+   FILE * pFile;
+   string fileName = prefix + ".raw";
+   pFile = fopen (fileName.c_str(), "w");
+   
+   for (int i = 0; i < VolImage::height; i++){
+      for (int j = 0; j < VolImage::width; j ++){
+         fwrite (VolImage::slices[sliceID][i], sizeof(char), sizeof(VolImage::slices[sliceID][i]), pFile);
+      }
+      
+
+   }
+   fclose(pFile);
+     //int width = VolImage::slices[sliceID]);
+   //cout << width << " width";
+
+}
+
+void VolImage::diffmap(int sliceI, int sliceJ, string prefix){
+
+   unsigned char** Diffslice = new unsigned char*[VolImage::height];
+      for (int i = 0; i < height; i++){
+         Diffslice[i] = new unsigned char[VolImage::width];
+      }
+      
+   
+   for (int j = 0; j < height; j++){
+      for (int k = 0; k < width; k++){
+         Diffslice[j][k] = (unsigned char)(abs((float)VolImage::slices[sliceI][j][k] - (float)VolImage::slices[sliceJ][j][k])/2);
+      }
+   
+   }
+   
+   ofstream  rawFile(prefix + ".raw");
+   rawFile.close();
+   
+   FILE * pFile;
+   string fileName = prefix + ".raw";
+   pFile = fopen (fileName.c_str(), "w");
+   
+   for (int i = 0; i < VolImage::height; i++){
+      for (int j = 0; j < VolImage::width; j ++){
+         fwrite (Diffslice[i], sizeof(char), sizeof(Diffslice[i]), pFile);
+      }
+      
+
+   }
+   fclose(pFile);
+   
+
 }
