@@ -22,7 +22,7 @@ class VolImage{
    public:
       
       VolImage(); //default constructor defined in .cpp
-      //VolImage(); //destructor defined in .cpp
+      ~VolImage(); //destructor defined in .cpp
 
       
       //populate object with images from stack

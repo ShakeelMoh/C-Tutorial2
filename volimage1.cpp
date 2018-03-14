@@ -11,9 +11,24 @@
 
 using namespace std;
 
+//const
 VolImage::VolImage(){
    width = 0;
    height = 0;
+}
+
+//destr
+VolImage::~VolImage(){
+   
+   /*
+   for (int i = 0; i < VolImage::slices.size(); i ++){
+      for (int j = 0; j < VolImage::height; j++){
+         delete VolImage::slices[i][j];
+      }
+      delete VolImage::slices[i];
+   }
+  */
+  cout << "Destructor executing...";
 }
 
 
@@ -54,15 +69,33 @@ void VolImage::readImages(string baseName){
       for (int i = 0; i < height; i++){
          slice[i] = new unsigned char[width];
       }
-
-       
+     
+      /*
       FILE * pFile;
       pFile = fopen(fileName.c_str(), "r");
       fread(&slice[0][0], height, width, pFile);
+      */
+      
+      ifstream pFile (fileName, ios::binary);
+      pFile.seekg(0, pFile.end);
+      int length = pFile.tellg();
+      pFile.seekg(0, ios::beg);
+     // cout << "Reading characters of length: " << length;
+      
+      for (int i = 0; i < height; i++){
+         for (int j = 0; j < width; j++){
+            pFile.read((char*) &slice[i][j], 1);
+         }
+      }
+      //pFile.read(*slice, length);
+      //pFile.close();
       
       
+      //cout << "Rows " << sizeof(slice)/sizeof(slice[0]);
+      //cout << "Cols " << sizeof(slice[0])/sizeof(unsigned char);
+      //cout << "height " << height << " width" << width;
       //cout << "Size of vector: " << sizeof(slice[0]) << " " << sizeof(slice)/sizeof(slice[0]) << "\n";
-      //cout << "Random vector pos " << slice[100][100] << "\n\n";
+      //cout << "Random vector pos " << slice[120][120] << "\n\n";
       
       VolImage::slices.push_back(slice); //push back stuff now...push_back(new slice??)
       
@@ -92,20 +125,14 @@ void VolImage::extract(int sliceID, string prefix){
    ofstream  rawFile(prefix + ".raw");
    rawFile.close();
    
-   FILE * pFile;
-   string fileName = prefix + ".raw";
-   pFile = fopen (fileName.c_str(), "w");
-   
-   for (int i = 0; i < VolImage::height; i++){
-      for (int j = 0; j < VolImage::width; j ++){
-         fwrite (VolImage::slices[sliceID][i], sizeof(char), sizeof(VolImage::slices[sliceID][i]), pFile);
+         
+   ofstream pFile (prefix + ".raw", ios::binary);
+   for (int i = 0; i < height; i++){
+      for (int j = 0; j < width; j++){
+         pFile.write((char*)&VolImage::slices[sliceID][i][j], 1);
       }
-      
-
    }
-   fclose(pFile);
-     //int width = VolImage::slices[sliceID]);
-   //cout << width << " width";
+   
 
 }
 
@@ -140,5 +167,12 @@ void VolImage::diffmap(int sliceI, int sliceJ, string prefix){
    }
    fclose(pFile);
    
+
+}
+
+
+int VolImage::volImageSize(){
+
+//The functionality of this method was implemented in the readImages method above
 
 }
