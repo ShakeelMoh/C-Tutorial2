@@ -20,15 +20,16 @@ VolImage::VolImage(){
 //destr
 VolImage::~VolImage(){
    
-   /*
+   cout << "Destructor executing...";
+   
    for (int i = 0; i < VolImage::slices.size(); i ++){
       for (int j = 0; j < VolImage::height; j++){
-         delete VolImage::slices[i][j];
+         delete[] VolImage::slices[i][j];
       }
-      delete VolImage::slices[i];
+      delete[] VolImage::slices[i];
    }
-  */
-  cout << "Destructor executing...";
+  
+
 }
 
 
