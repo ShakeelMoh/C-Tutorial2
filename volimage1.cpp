@@ -153,20 +153,13 @@ void VolImage::diffmap(int sliceI, int sliceJ, string prefix){
    
    ofstream  rawFile(prefix + ".raw");
    rawFile.close();
-   
-   FILE * pFile;
-   string fileName = prefix + ".raw";
-   pFile = fopen (fileName.c_str(), "w");
-   
-   for (int i = 0; i < VolImage::height; i++){
-      for (int j = 0; j < VolImage::width; j ++){
-         fwrite (Diffslice[i], sizeof(char), sizeof(Diffslice[i]), pFile);
-      }
-      
 
+   ofstream pFile (prefix + ".raw", ios::binary);
+   for (int i = 0; i < height; i++){
+      for (int j = 0; j < width; j++){
+         pFile.write((char*)&Diffslice[i][j], 1);
+      }
    }
-   fclose(pFile);
-   
 
 }
 
